@@ -7,13 +7,24 @@ trigger:
 - main
 
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: 'Default'
 
-steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+stages:
+  - stage: Build
+    jobs:
+      - job: BuildDockerfile
+        steps:
+          - script: echo Build
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+  - stage: DevDeploy
+    dependsOn: Build
+    jobs:
+      - job: BuildDockerfile
+        steps:
+          - bash: echo DevDeploy
+  - stage: TestDeploy
+    dependsOn: DevDeploy
+    jobs:
+      - job: BuildDockerfile
+        steps:
+          - bash: echo TestDeploy

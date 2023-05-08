@@ -13,17 +13,19 @@ stages:
     jobs:
       - job: BuildDockerfile
         steps:
-          - script: echo Build
+          - bash: echo Build
 
-  - stage: DevDeploy
-    dependsOn: Build
-    jobs:
-      - job: BuildDockerfile
-        steps:
-          - bash: echo DevDeploy
   - stage: TestDeploy
     dependsOn: DevDeploy
     jobs:
-      - job: BuildDockerfile
+      - job: RunTests
         steps:
-          - bash: echo TestDeploy
+          - bash: echo test
+  
+  - stage: DevDeploy
+    dependsOn: Build
+    jobs:
+      - job: RunDockerCompose
+        steps:
+          - bash: echo DevDeploy
+  

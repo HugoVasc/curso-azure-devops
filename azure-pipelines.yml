@@ -31,7 +31,7 @@ stages:
           - bash: echo test
   
   - stage: DevDeploy
-    dependsOn: Build
+    dependsOn: BuildDev
     jobs:
       - job: RunDockerCompose
         steps:

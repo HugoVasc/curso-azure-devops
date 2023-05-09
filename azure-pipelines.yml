@@ -6,10 +6,12 @@
 trigger:
 - main
 
-pool: Default
+pool: 
+  vmImage: 'ubuntu-latest'
+  
 
 stages:
-  - stage: Build
+  - stage: BuildDev
     jobs:
       - job: BuildDockerfile
         steps:
@@ -29,9 +31,18 @@ stages:
           - bash: echo test
   
   - stage: DevDeploy
-    dependsOn: Build
+    dependsOn: BuildDev
     jobs:
+      - deployment: DevDeploy
+        environment: Dev
       - job: RunDockerCompose
         steps:
           - bash: echo DevDeploy
-  
+
+  - stage: ProdDeploy
+    jobs:
+      - deployment: ProdDeploy
+        environment: Prod
+      - job: RunDockerCompose
+        steps:
+          - bash: echo ProdDeploy
